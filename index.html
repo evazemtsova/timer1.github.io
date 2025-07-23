@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Двойной таймер</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        .timer-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin: 30px auto;
+            max-width: 900px;
+        }
+        .timer-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        .timer-display {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .time-units {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .time-unit {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 100px;
+            margin: 5px;
+        }
+        .number {
+            font-size: 2.2em;
+            font-weight: bold;
+            display: block;
+        }
+        .label {
+            font-size: 0.7em;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+        @media (max-width: 768px) {
+            .time-unit {
+                min-width: 70px;
+                padding: 10px;
+            }
+            .number {
+                font-size: 1.6em;
+            }
+            .timer-title {
+                font-size: 1.5em;
+            }
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Двойной таймер</h1>
+        <p class="subtitle">Обратный отсчет до важных дат 2026 года</p>
+        
+        <!-- Таймер до 1 марта 2026 -->
+        <div class="timer-section">
+            <h2 class="timer-title">До 1 марта 2026 года осталось:</h2>
+            <div class="timer-display" id="timer1">
+                <div class="time-units">
+                    <div class="time-unit">
+                        <span class="number" id="months1">00</span>
+                        <span class="label">месяцев</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="number" id="days1">00</span>
+                        <span class="label">дней</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="number" id="hours1">00</span>
+                        <span class="label">часов</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="number" id="minutes1">00</span>
+                        <span class="label">минут</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="number" id="seconds1">00</span>
+                        <span class="label">секунд</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Таймер до 23 апреля 2026 -->
+        <div class="timer-section">
+            <h2 class="timer-title">До 23 апреля 2026 года осталось:</h2>
+            <div class="timer-display" id="timer2">
+                <div class="time-units">
+                    <div class="time-unit">
+                        <span class="number" id="months2">00</span>
+                        <span class="label">месяцев</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="number" id="days2">00</span>
+                        <span class="label">дней</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="number" id="hours2">00</span>
+                        <span class="label">часов</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="number" id="minutes2">00</span>
+                        <span class="label">минут</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="number" id="seconds2">00</span>
+                        <span class="label">секунд</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateTimer(targetDate, monthsId, daysId, hoursId, minutesId, secondsId) {
+            const currentDate = new Date();
+            let diffTime = targetDate - currentDate;
+            
+            if (diffTime <= 0) {
+                document.getElementById(monthsId).textContent = '00';
+                document.getElementById(daysId).textContent = '00';
+                document.getElementById(hoursId).textContent = '00';
+                document.getElementById(minutesId).textContent = '00';
+                document.getElementById(secondsId).textContent = '00';
+                return;
+            }
+            
+            // Вычисляем месяцы
+            let months = 0;
+            let tempDate = new Date(currentDate);
+            
+            while (tempDate < targetDate) {
+                tempDate.setMonth(tempDate.getMonth() + 1);
+                if (tempDate <= targetDate) {
+                    months++;
+                } else {
+                    tempDate.setMonth(tempDate.getMonth() - 1);
+                    break;
+                }
+            }
+            
+            // Оставшееся время после вычитания месяцев
+            const remainingTime = targetDate - tempDate;
+            const diffDays = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+            const diffSeconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+            
+            // Обновляем элементы на странице
+            document.getElementById(monthsId).textContent = String(months).padStart(2, '0');
+            document.getElementById(daysId).textContent = String(diffDays).padStart(2, '0');
+            document.getElementById(hoursId).textContent = String(diffHours).padStart(2, '0');
+            document.getElementById(minutesId).textContent = String(diffMinutes).padStart(2, '0');
+            document.getElementById(secondsId).textContent = String(diffSeconds).padStart(2, '0');
+        }
+
+        // Целевые даты
+        const targetDate1 = new Date('2026-03-01T00:00:00');
+        const targetDate2 = new Date('2026-04-23T00:00:00');
+
+        function updateAllTimers() {
+            updateTimer(targetDate1, 'months1', 'days1', 'hours1', 'minutes1', 'seconds1');
+            updateTimer(targetDate2, 'months2', 'days2', 'hours2', 'minutes2', 'seconds2');
+        }
+
+        // Обновляем таймеры сразу и затем каждую секунду
+        updateAllTimers();
+        setInterval(updateAllTimers, 1000);
+    </script>
+</body>
+</html>
